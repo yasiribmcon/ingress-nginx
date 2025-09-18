@@ -236,6 +236,10 @@ jobs:
         run: |
           echo "building images..."
           export TAGNGINX=$(cat images/nginx/TAG)
+          echo "Current directory: $(pwd)"
+          ls -R | head -50
+          ls -l build || true
+          ls -l build/build.sh || true
           make PLATFORMS="linux/s390x" BASE_IMAGE=localhost:5000/ingress-nginx/nginx:${TAGNGINX} clean-image build image image-chroot
 
   chart-lint:
