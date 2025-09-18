@@ -211,12 +211,8 @@ jobs:
   build_s390x:
     name: Build-s390x
     runs-on: self-hosted
-    needs: changes
     outputs:
       golangversion: ${{ steps.golangversion.outputs.version }}
-    if: |
-      (needs.changes.outputs.go == 'true') || (needs.changes.outputs.charts == 'true') || (needs.changes.outputs.baseimage == 'true') || ${{ github.event.workflow_dispatch.run_e2e == 'true' }}
-
     env:
         PLATFORMS: linux/s390x
     steps:
@@ -226,7 +222,7 @@ jobs:
       - name: Build NGINX Base image
         run: |
             export I_N_BUILDER_CONFIG=$GITHUB_WORKSPACE/buildx-config.toml
-            cat << EOF > "${I_N_BUILDER_CONFIG}"
+            cat << 'EOF' > "${I_N_BUILDER_CONFIG}"
 [registry."localhost:5000"]
 http = true
 insecure = true
