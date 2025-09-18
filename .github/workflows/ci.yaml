@@ -229,6 +229,14 @@ jobs:
             docker buildx create --name ingress-nginx --buildkitd-config ${I_N_BUILDER_CONFIG} --driver-opt "network=host" --bootstrap
             cd images/nginx/rootfs && docker buildx build --builder ingress-nginx --platform="linux/s390x"  --load -t localhost:5000/ingress-nginx/nginx:${TAG} . --push
 
+      - name: Debug mounts inside container
+        run: |
+            echo "KUBE_ROOT=$PWD"
+            docker run --rm \
+            -v $PWD:/go/src/k8s.io/ingress-nginx \
+            -w /go/src/k8s.io/ingress-nginx \
+            alpine ls -l build
+
       - name: Build images
         env:
           TAG: 1.0.0-dev
